@@ -6,6 +6,16 @@ The following was discovered as part of building this project:
 
 # Getting Started
 
+* JDK 11
+* Maven
+* Spring Boot 3.0.6
+* Spring Boot Starter Web
+* Lombok
+* Spring Boot Dev Tools
+* Spring Boot Starter Data JPA
+* MySQL 8.0.33
+* Packaging Jar
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 
