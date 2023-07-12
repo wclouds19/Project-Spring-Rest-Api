@@ -1,9 +1,11 @@
 package bootcamp.rest.services;
 
+import bootcamp.rest.dto.ResponData;
 import bootcamp.rest.models.entities.Article;
 import bootcamp.rest.models.repos.ArticleRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -19,20 +21,24 @@ public class ArticleService {
         return articleRepo.save(article);
     }
 
-    public Article findOneArticle(Long Id){
+    public Article findOneArticle(Long Id) throws Exception{
+
         Optional<Article> article = articleRepo.findById(Id);
         if(!article.isPresent()){
-            return null;
+            return article.orElseThrow(() -> new Exception("Article not found for this id :: " + Id));
         }
         return article.get(); 
-
     }
 
     public Iterable<Article> findAllArticle(){
         return articleRepo.findAll();
     }
 
-    public void removeOneArticle(Long Id){
+    public void removeOneArticle(Long Id) throws Exception{
+        Optional<Article> article = articleRepo.findById(Id);
+        if(!article.isPresent()){
+            article.orElseThrow(() -> new Exception("Article not found for this id :: " + Id));
+        }
         articleRepo.deleteById(Id);
     }
 

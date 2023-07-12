@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 @Entity
@@ -16,19 +18,24 @@ public class Article implements Serializable{
     @GeneratedValue(strategy=GenerationType.IDENTITY)  //To Set Id AutoIncrement
     private Long Id;
 
+    @NotEmpty(message="Author is required")
     @Column(name="author_name", length=100)
     private String author;
 
+    @NotEmpty(message="Title is required")
     @Column(name="title_article", length=100)
     private String title;
     
+    @NotEmpty(message="Description is required")
     @Column(name="description", length=500)
     private String description;
-    
+        
+    @NotEmpty(message="Post Date is required")
     @Column(name="post_date", length=10)
     private String date;
-
+    
     public Article() {
+
     }
 
     public Article(Long id, String author, String title, String description, String date) {
@@ -75,7 +82,7 @@ public class Article implements Serializable{
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(String date) {    
         this.date = date;
     }
 }
