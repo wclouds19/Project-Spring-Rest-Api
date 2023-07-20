@@ -22,7 +22,7 @@ public class Article implements Serializable{
     private Long Id;
 
     @NotEmpty(message="Title is required")
-    @Column(name="title_article", length=30)
+    @Column(name="title_article", length=30, unique=true)
     private String title;
     
     @NotEmpty(message="Description is required")

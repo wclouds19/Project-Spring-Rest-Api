@@ -19,11 +19,11 @@ public class ArticleService {
         return articleRepo.save(article);
     }
 
-    public Article findOneArticle(Long Id) throws Exception{
+    public Article findOneArticle(Long Id){
 
         Optional<Article> article = articleRepo.findById(Id);
         if(!article.isPresent()){
-            return article.orElseThrow(() -> new Exception("Article not found for this id :: " + Id));
+            throw new RuntimeException("Article not found for this id :: " + Id);        
         }
         return article.get(); 
     }
@@ -32,10 +32,10 @@ public class ArticleService {
         return articleRepo.findAll();
     }
 
-    public void removeOneArticle(Long Id) throws Exception{
+    public void removeOneArticle(Long Id){
         Optional<Article> article = articleRepo.findById(Id);
         if(!article.isPresent()){
-            article.orElseThrow(() -> new Exception("Article not found for this id :: " + Id));
+            throw new RuntimeException("Article not found for this id :: " + Id); 
         }
         articleRepo.deleteById(Id);
     }
