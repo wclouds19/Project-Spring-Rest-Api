@@ -1,7 +1,12 @@
 package bootcamp.rest.controllers;
 
+import java.util.Arrays;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -19,13 +24,14 @@ import jakarta.validation.Valid;
 import bootcamp.rest.models.entities.Category;
 import bootcamp.rest.dto.CategoryDataTransferObject;
 import bootcamp.rest.dto.ResponData;
+import bootcamp.rest.dto.SearchDataDto;
 
 @RestController
 @RequestMapping("api/category")
 public class CategoryController {
 
     @Autowired
-    public CategoryService CategoryService;
+    public CategoryService categoryService;
 
     @Autowired
     public ModelMapper modelMapper;
@@ -48,19 +54,19 @@ public class CategoryController {
         Category category = modelMapper.map(categoryDataTransferObject, Category.class);
 
         responData.setStatus(true);
-        responData.setdata(CategoryService.create(category));
+        responData.setdata(categoryService.create(category));
         return ResponseEntity.ok(responData);
     }
 
     @GetMapping
     public Iterable<Category> findAll(){
-        return CategoryService.findAllCategory();
+        return categoryService.findAllCategory();
     }
 
     @GetMapping("/{id}")
     public Category findOneCategory(@PathVariable("id") Long Id){
 
-        return CategoryService.findOneCategory(Id); 
+        return categoryService.findOneCategory(Id); 
     }
 
     @PutMapping
@@ -80,12 +86,41 @@ public class CategoryController {
         Category category = modelMapper.map(categoryDataTransferObject, Category.class); //Set Category Data using Map
 
         responData.setStatus(true);
-        responData.setdata(CategoryService.create(category));
+        responData.setdata(categoryService.create(category));
         return ResponseEntity.ok(responData);
     }
 
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long Id){
-        CategoryService.removeOneCategory(Id);
+        categoryService.removeOneCategory(Id);
+    }
+
+    @PostMapping("/search/{size}/{page}")
+    public Iterable<Category> findByName(@RequestBody SearchDataDto searchData, @PathVariable("size") int size, @PathVariable("page") int page){
+
+        Pageable pageable = PageRequest.of(page, size);
+        return categoryService.findByName(searchData.getNameKey(), pageable);
+    } 
+
+    @PostMapping("/search/{size}/{page}/{sort}")
+    public Iterable<Category> findByName(@RequestBody SearchDataDto searchData, @PathVariable("size") int size, @PathVariable("page") int page, @PathVariable("sort") String sort){
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));  // Default Asc
+
+        if(sort.equalsIgnoreCase("desc")){
+            pageable = PageRequest.of(page, size, Sort.by("id").descending()); // If Input Default Desc
+        }
+
+        return categoryService.findByName(searchData.getNameKey(), pageable);
+    } 
+
+    //This Method to Create More Category Data
+    @PostMapping("/createmoredata")
+    public ResponseEntity<ResponData<Iterable<Category>>> createMoreData(@RequestBody Category[] category){
+
+        ResponData<Iterable<Category>> responData = new ResponData<>();
+        responData.setStatus(true);
+        responData.setdata(categoryService.createMoreData(Arrays.asList(category)));
+        return ResponseEntity.ok(responData);
     }
 }

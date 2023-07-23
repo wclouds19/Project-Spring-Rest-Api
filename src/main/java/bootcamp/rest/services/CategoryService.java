@@ -1,9 +1,9 @@
 package bootcamp.rest.services;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import bootcamp.rest.models.entities.Category;
 import bootcamp.rest.models.repos.CategoryRepo;
@@ -41,8 +41,13 @@ public class CategoryService {
         categoryRepo.deleteById(Id);
     }
 
-    //Call the Custom Method to Find Category by Name
-    public List<Category> findByNameCategoryTitle(String title){
-        return categoryRepo.findByName(title);
+    //Call the Custom Method to Find Category by Name do Paging and Sorting
+    public Iterable<Category> findByName(String name, Pageable pageable){
+        return categoryRepo.findByNameContains(name, pageable);
+    }
+
+    //Custom Method to Create a more Data Category
+    public Iterable<Category> createMoreData(Iterable <Category> category){
+        return categoryRepo.saveAll(category);
     }
 }
