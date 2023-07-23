@@ -40,8 +40,13 @@ public class ArticleService {
         articleRepo.deleteById(Id);
     }
 
-    //Call the Custom Method Article Title to Find Article Title by Name
-    public List<Article> findByNameArticleTitle(String title){
-        return articleRepo.findByTitle(title);
+    //Call the Custom Method Find Article by Title 
+    public List<Article> findByTitle(String title){
+        return articleRepo.findByTitle("%"+title+"%");
+    }
+
+    //Call the Custom Method to Find Article by Category ID
+    public List<Article> findByCategory(Long Id){
+        return articleRepo.findByCategory(Id);
     }
 }

@@ -17,6 +17,8 @@ import bootcamp.rest.services.ArticleService;
 import jakarta.validation.Valid;
 import bootcamp.rest.models.entities.Article;
 import bootcamp.rest.dto.ResponData;
+import bootcamp.rest.dto.SearchDataDto;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/article")
@@ -78,5 +80,15 @@ public class ArticleController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long Id){
         articleService.removeOneArticle(Id);
+    }
+
+    @PostMapping("/search/title")
+    public List<Article> findArticleByTitle(@RequestBody SearchDataDto searchKey){
+        return articleService.findByTitle(searchKey.getSearchKey());
+    }
+
+    @GetMapping("/search/category/{id}")
+    public List<Article> findArticleByCategory(@PathVariable("id") Long Id){
+        return articleService.findByCategory(Id);
     }
 }
