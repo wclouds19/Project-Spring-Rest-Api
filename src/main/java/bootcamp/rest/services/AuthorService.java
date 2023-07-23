@@ -41,8 +41,23 @@ public class AuthorService {
         authorRepo.deleteById(Id);
     }
 
-    //Call the Custom Method to Find Author by Name
-    public List<Author> findByNameAuthor(String title){
-        return authorRepo.findByName(title);
+    //This is Derived Query Methods to Find the Author by Email
+    public Author findByEmail(String email){
+        return authorRepo.findByEmail(email);
+    }
+
+    //This is Derived Query Methods to Find the Author by Name
+    public List<Author> findByName(String name){
+        return authorRepo.findByNameContains(name);
+    }
+
+    //This is Derived Query Methods to Find the Author by Specific Prefix Name
+    public List<Author> findByNameStartWith(String name){
+        return authorRepo.findByNameStartingWith(name);
+    }
+
+    //This is Derived Query Methods to Find the Author by Name or by Email
+    public List<Author> findByNameOrEmail(String name, String email){
+        return authorRepo.findByNameContainsOrEmailContains(name, email);
     }
 }

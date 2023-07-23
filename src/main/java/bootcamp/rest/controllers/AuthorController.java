@@ -1,5 +1,6 @@
 package bootcamp.rest.controllers;
 
+import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import bootcamp.rest.dto.AuthorDataTransferObject;
 import bootcamp.rest.dto.ResponData;
+import bootcamp.rest.dto.SearchDataDto;
 import bootcamp.rest.services.AuthorService;
 import jakarta.validation.Valid;
 import bootcamp.rest.models.entities.Author;
@@ -86,6 +88,26 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public void deleteOne(@PathVariable("id") Long Id){
         authorService.removeOneAuthor(Id);
+    }
+
+    @PostMapping("/search/email")
+    public Author findAuthorByEmail(@RequestBody SearchDataDto searchData){
+        return authorService.findByEmail(searchData.getEmailKey());
+    }
+
+    @PostMapping("/search/name")
+    public List<Author> findAuthorByName(@RequestBody SearchDataDto searchData){
+        return authorService.findByName(searchData.getNameKey());
+    }
+
+    @PostMapping("/search/namestartwith")
+    public List<Author> findAuthorByNameStartWith(@RequestBody SearchDataDto searchData){
+        return authorService.findByNameStartWith(searchData.getNameKey());
+    }
+
+    @PostMapping("/search/nameoremail")
+    public List<Author> findAuthorByNameOrEmail(@RequestBody SearchDataDto searchData){
+        return authorService.findByNameOrEmail(searchData.getNameKey(), searchData.getEmailKey());
     }
 
 }

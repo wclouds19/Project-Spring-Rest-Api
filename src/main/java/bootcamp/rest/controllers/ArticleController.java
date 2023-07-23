@@ -91,4 +91,9 @@ public class ArticleController {
     public List<Article> findArticleByCategory(@PathVariable("id") Long Id){
         return articleService.findByCategory(Id);
     }
+
+    @GetMapping("/search/author/{id}")
+    public List<Article> findArticleByAuthor(@PathVariable("id") Long Id){
+        return articleService.findByAuthor(Id);
+    }
 }
