@@ -20,12 +20,12 @@ public class ArticleService {
     }
 
     public Article findOneArticle(Long Id){
+
         Optional<Article> article = articleRepo.findById(Id);
         if(!article.isPresent()){
-            return null;
+            throw new RuntimeException("Article not found for this id :: " + Id);        
         }
         return article.get(); 
-
     }
 
     public Iterable<Article> findAllArticle(){
@@ -33,11 +33,25 @@ public class ArticleService {
     }
 
     public void removeOneArticle(Long Id){
+        Optional<Article> article = articleRepo.findById(Id);
+        if(!article.isPresent()){
+            throw new RuntimeException("Article not found for this id :: " + Id); 
+        }
         articleRepo.deleteById(Id);
     }
 
-    //Call the Custom Method Article Title to Find Article Title by Name
-    public List<Article> findByNameArticleTitle(String title){
-        return articleRepo.findByTitle(title);
+    //Call the Custom Query Method Find Article by Title 
+    public List<Article> findByTitle(String title){
+        return articleRepo.findByTitle("%"+title+"%");
+    }
+
+    //Call the Custom Query Method to Find Article by Category ID
+    public List<Article> findByCategory(Long Id){
+        return articleRepo.findByCategory(Id);
+    }
+
+    //Call the Custom  Method to Find Article by Author ID
+    public List<Article> findByAuthor(Long Id){
+        return articleRepo.findByAuthor(Id);
     }
 }
