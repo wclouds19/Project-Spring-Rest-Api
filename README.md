@@ -1,9 +1,3 @@
-# Read Me First
-The following was discovered as part of building this project:
-
-* The JVM level was changed from '11' to '17', review the [JDK Version Range](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions#jdk-version-range) on the wiki for more details.
-* The original package name 'bootcamp.rest.project-rest-api' is invalid and this project uses 'bootcamp.rest.projectrestapi' instead.
-
 # Getting Started
 
 * JDK 11
@@ -15,6 +9,7 @@ The following was discovered as part of building this project:
 * Spring Boot Starter Data JPA
 * MySQL 8.0.33
 * Packaging Jar
+* Spring Security + JWT
 
 ### Reference Documentation
 For further reference, please consider the following sections:
