@@ -3,7 +3,7 @@ package bootcamp.rest.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
-public class AuthorDataTransferObject {
+public class AuthorDto {
 
     @NotEmpty(message="Name is required")
     private String name;

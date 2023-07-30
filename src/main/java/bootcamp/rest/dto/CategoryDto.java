@@ -2,7 +2,7 @@ package bootcamp.rest.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public class CategoryDataTransferObject {
+public class CategoryDto {
     
     @NotEmpty(message="Name is required")
     private String name;

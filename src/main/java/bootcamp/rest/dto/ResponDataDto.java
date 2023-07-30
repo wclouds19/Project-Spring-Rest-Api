@@ -3,7 +3,7 @@ package bootcamp.rest.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResponData<T> {
+public class ResponDataDto<T> {
     
     private boolean status;
     private List<String> messages = new ArrayList<>();

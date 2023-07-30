@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bootcamp.rest.services.ArticleService;
 import jakarta.validation.Valid;
 import bootcamp.rest.models.entities.Article;
-import bootcamp.rest.dto.ResponData;
+import bootcamp.rest.dto.ResponDataDto;
 import bootcamp.rest.dto.SearchDataDto;
 import java.util.List;
 
@@ -29,9 +29,9 @@ public class ArticleController {
     
     //This article will send through by Request Body Client (Web or Mobile) 
     @PostMapping
-    public ResponseEntity<ResponData<Article>> create(@Valid @RequestBody Article article, Errors errors){
+    public ResponseEntity<ResponDataDto<Article>> create(@Valid @RequestBody Article article, Errors errors){
 
-        ResponData<Article> responData = new ResponData<>();
+        ResponDataDto<Article> responData = new ResponDataDto<>();
 
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
@@ -59,9 +59,9 @@ public class ArticleController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponData<Article>> update(@Valid @RequestBody Article article, Errors errors){
+    public ResponseEntity<ResponDataDto<Article>> update(@Valid @RequestBody Article article, Errors errors){
         
-        ResponData<Article> responData = new ResponData<>();
+        ResponDataDto<Article> responData = new ResponDataDto<>();
 
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){

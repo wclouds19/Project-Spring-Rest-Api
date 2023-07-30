@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
-import bootcamp.rest.dto.AuthorDataTransferObject;
-import bootcamp.rest.dto.ResponData;
+import bootcamp.rest.dto.AuthorDto;
+import bootcamp.rest.dto.ResponDataDto;
 import bootcamp.rest.dto.SearchDataDto;
 import bootcamp.rest.services.AuthorService;
 import jakarta.validation.Valid;
@@ -34,9 +34,9 @@ public class AuthorController {
 
     //This Author will send through by Request Body Client (Web or Mobile) 
     @PostMapping
-    public ResponseEntity<ResponData<Author>> create(@Valid @RequestBody AuthorDataTransferObject authorDataTransferObject, Errors errors){
+    public ResponseEntity<ResponDataDto<Author>> create(@Valid @RequestBody AuthorDto authorDataTransferObject, Errors errors){
 
-        ResponData<Author> responData = new ResponData<>();
+        ResponDataDto<Author> responData = new ResponDataDto<>();
 
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
@@ -65,9 +65,9 @@ public class AuthorController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponData<Author>> update(@Valid @RequestBody AuthorDataTransferObject authorDataTransferObject, Errors errors){
+    public ResponseEntity<ResponDataDto<Author>> update(@Valid @RequestBody AuthorDto authorDataTransferObject, Errors errors){
 
-        ResponData<Author> responData = new ResponData<>();
+        ResponDataDto<Author> responData = new ResponDataDto<>();
 
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){

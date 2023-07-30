@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import bootcamp.rest.services.CategoryService;
 import jakarta.validation.Valid;
 import bootcamp.rest.models.entities.Category;
-import bootcamp.rest.dto.CategoryDataTransferObject;
-import bootcamp.rest.dto.ResponData;
+import bootcamp.rest.dto.CategoryDto;
+import bootcamp.rest.dto.ResponDataDto;
 import bootcamp.rest.dto.SearchDataDto;
 
 @RestController
@@ -38,9 +38,9 @@ public class CategoryController {
     
     //This Category will send through by Request Body Client (Web or Mobile) 
     @PostMapping
-    public ResponseEntity<ResponData<Category>> create(@Valid @RequestBody CategoryDataTransferObject categoryDataTransferObject, Errors errors){
+    public ResponseEntity<ResponDataDto<Category>> create(@Valid @RequestBody CategoryDto categoryDataTransferObject, Errors errors){
 
-        ResponData<Category> responData = new ResponData<>();
+        ResponDataDto<Category> responData = new ResponDataDto<>();
 
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
@@ -70,9 +70,9 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponData<Category>> update(@Valid @RequestBody CategoryDataTransferObject categoryDataTransferObject, Errors errors){
+    public ResponseEntity<ResponDataDto<Category>> update(@Valid @RequestBody CategoryDto categoryDataTransferObject, Errors errors){
 
-        ResponData<Category> responData = new ResponData<>();
+        ResponDataDto<Category> responData = new ResponDataDto<>();
 
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
@@ -116,9 +116,9 @@ public class CategoryController {
 
     //This Method to Create More Category Data
     @PostMapping("/createmoredata")
-    public ResponseEntity<ResponData<Iterable<Category>>> createMoreData(@RequestBody Category[] category){
+    public ResponseEntity<ResponDataDto<Iterable<Category>>> createMoreData(@RequestBody Category[] category){
 
-        ResponData<Iterable<Category>> responData = new ResponData<>();
+        ResponDataDto<Iterable<Category>> responData = new ResponDataDto<>();
         responData.setStatus(true);
         responData.setdata(categoryService.createMoreData(Arrays.asList(category)));
         return ResponseEntity.ok(responData);
