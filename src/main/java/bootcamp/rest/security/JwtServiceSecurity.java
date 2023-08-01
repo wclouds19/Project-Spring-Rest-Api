@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtService {
+public class JwtServiceSecurity {
 
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    public static final String SECRET = "9Q8W7E6R5T4Y3U2I1O1P2A3S4D5F6G7H8J9K0L9Z8X7C6V5B4N3M2Q1W";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -49,7 +49,6 @@ public class JwtService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
 
     public String generateToken(String userName){
         Map<String,Object> claims=new HashMap<>();

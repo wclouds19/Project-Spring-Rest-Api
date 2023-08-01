@@ -4,11 +4,13 @@ import jakarta.validation.constraints.NotEmpty;
 
 public class CategoryDto {
     
+    private Long Id;
+
     @NotEmpty(message="Name is required")
     private String name;
 
     @NotEmpty(message="Description is required")
-    private String description;
+    private String description;    
 
     public void setName(String name) {
         this.name = name;
@@ -25,5 +27,8 @@ public class CategoryDto {
     public String getDescription() {
         return description;
     }
-    
+
+    public Long getId() {
+        return Id;
+    }    
 }

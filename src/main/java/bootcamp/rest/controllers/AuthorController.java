@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +35,7 @@ public class AuthorController {
 
     //This Author will send through by Request Body Client (Web or Mobile) 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ResponDataDto<Author>> create(@Valid @RequestBody AuthorDto authorDataTransferObject, Errors errors){
 
         ResponDataDto<Author> responData = new ResponDataDto<>();
@@ -55,16 +57,19 @@ public class AuthorController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Iterable<Author> findAll(){
         return authorService.findAllAuthor();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Author findOneAuthor(@PathVariable("id") Long Id){
         return authorService.findOneAuthor(Id); 
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ResponDataDto<Author>> update(@Valid @RequestBody AuthorDto authorDataTransferObject, Errors errors){
 
         ResponDataDto<Author> responData = new ResponDataDto<>();
@@ -86,28 +91,32 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteOne(@PathVariable("id") Long Id){
         authorService.removeOneAuthor(Id);
     }
 
     @PostMapping("/search/email")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Author findAuthorByEmail(@RequestBody SearchDataDto searchData){
         return authorService.findByEmail(searchData.getEmailKey());
     }
 
     @PostMapping("/search/name")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<Author> findAuthorByName(@RequestBody SearchDataDto searchData){
         return authorService.findByName(searchData.getNameKey());
     }
 
     @PostMapping("/search/namestartwith")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<Author> findAuthorByNameStartWith(@RequestBody SearchDataDto searchData){
         return authorService.findByNameStartWith(searchData.getNameKey());
     }
 
     @PostMapping("/search/nameoremail")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<Author> findAuthorByNameOrEmail(@RequestBody SearchDataDto searchData){
         return authorService.findByNameOrEmail(searchData.getNameKey(), searchData.getEmailKey());
     }
-
 }

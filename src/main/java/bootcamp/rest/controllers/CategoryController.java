@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +39,7 @@ public class CategoryController {
     
     //This Category will send through by Request Body Client (Web or Mobile) 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ResponDataDto<Category>> create(@Valid @RequestBody CategoryDto categoryDataTransferObject, Errors errors){
 
         ResponDataDto<Category> responData = new ResponDataDto<>();
@@ -59,17 +61,19 @@ public class CategoryController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Iterable<Category> findAll(){
         return categoryService.findAllCategory();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Category findOneCategory(@PathVariable("id") Long Id){
-
         return categoryService.findOneCategory(Id); 
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ResponDataDto<Category>> update(@Valid @RequestBody CategoryDto categoryDataTransferObject, Errors errors){
 
         ResponDataDto<Category> responData = new ResponDataDto<>();
@@ -91,11 +95,13 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public void deleteOne(@PathVariable("id") Long Id){
         categoryService.removeOneCategory(Id);
     }
 
     @PostMapping("/search/{size}/{page}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Iterable<Category> findByName(@RequestBody SearchDataDto searchData, @PathVariable("size") int size, @PathVariable("page") int page){
 
         Pageable pageable = PageRequest.of(page, size);
@@ -103,6 +109,7 @@ public class CategoryController {
     } 
 
     @PostMapping("/search/{size}/{page}/{sort}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Iterable<Category> findByName(@RequestBody SearchDataDto searchData, @PathVariable("size") int size, @PathVariable("page") int page, @PathVariable("sort") String sort){
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));  // Default Asc
@@ -116,6 +123,7 @@ public class CategoryController {
 
     //This Method to Create More Category Data
     @PostMapping("/createmoredata")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ResponDataDto<Iterable<Category>>> createMoreData(@RequestBody Category[] category){
 
         ResponDataDto<Iterable<Category>> responData = new ResponDataDto<>();

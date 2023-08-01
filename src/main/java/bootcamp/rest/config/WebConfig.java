@@ -12,53 +12,65 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import bootcamp.rest.security.JwtAuthFilter;
-import bootcamp.rest.services.UserService;
+import bootcamp.rest.security.AuthEntryPointJwt;
+import bootcamp.rest.security.JwtAuthFilterSecurity;
+import bootcamp.rest.services.UserDetailServices;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class WebSecurityConfig{
+public class WebConfig {
 
     @Autowired
-    private UserService userService;
+    private JwtAuthFilterSecurity authFilter;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private AuthEntryPointJwt unauthorizedHandler;
 
-    @Autowired
-    private JwtAuthFilter authFilter;
- 
+    @Bean
+    //authentication
+    public UserDetailsService userDetailsService() {
+        return new UserDetailServices();
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->{
-                    auth.requestMatchers("/api/user/register", "/api/user/authenticate").permitAll()
-                    .anyRequest().authenticated();
+                    auth.requestMatchers("/api/user/register","/api/user/auth").permitAll()
+                        .anyRequest().authenticated();
                 })
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //No session will be created or used by Spring Security
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-         
-        authProvider.setUserDetailsService(userService);
-        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-     
-        return authProvider;
-    }    
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }   
-   
+    public AuthenticationProvider authenticationProvider(){
+
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 }

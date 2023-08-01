@@ -3,6 +3,7 @@ package bootcamp.rest.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +30,7 @@ public class ArticleController {
     
     //This article will send through by Request Body Client (Web or Mobile) 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ResponDataDto<Article>> create(@Valid @RequestBody Article article, Errors errors){
 
         ResponDataDto<Article> responData = new ResponDataDto<>();
@@ -48,17 +50,20 @@ public class ArticleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Iterable<Article> findAll(){
         return articleService.findAllArticle();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Article findOneArticle(@PathVariable("id") Long Id){
 
         return articleService.findOneArticle(Id); 
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ResponDataDto<Article>> update(@Valid @RequestBody Article article, Errors errors){
         
         ResponDataDto<Article> responData = new ResponDataDto<>();
@@ -78,11 +83,13 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public void deleteOne(@PathVariable("id") Long Id){
         articleService.removeOneArticle(Id);
     }
 
     @PostMapping("/search/title")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public List<Article> findArticleByTitle(@RequestBody SearchDataDto searchKey){
         return articleService.findByTitle(searchKey.getSearchKey());
     }
@@ -93,6 +100,7 @@ public class ArticleController {
     }
 
     @GetMapping("/search/author/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public List<Article> findArticleByAuthor(@PathVariable("id") Long Id){
         return articleService.findByAuthor(Id);
     }
