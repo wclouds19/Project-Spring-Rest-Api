@@ -43,10 +43,7 @@ public class UserEntity {
     @Size(message="Phone Number only max 13 digit", max = 13)
     @Column(nullable=false)
     private String phone_number;
-
-    /*
-     * 
-     */
+    
     @NotEmpty(message="Roles is required")
     @Size(message="Roles only max 30 characters", max = 30)
     @Column(nullable=false)

@@ -3,12 +3,13 @@ package bootcamp.rest.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ResponDataDto<T> {
     
     private boolean status;
     private List<String> messages = new ArrayList<>();
-    private T data;
-    
+    private Object data;
+
     public void setStatus(boolean status) {
         this.status = status;
     }
@@ -17,9 +18,9 @@ public class ResponDataDto<T> {
         this.messages = messages;
     }
 
-    public void setdata(T data) {
+    public void setdata(Object data) {
         this.data = data;
-    }
+    } 
 
     public boolean isStatus() {
         return status;
@@ -29,8 +30,7 @@ public class ResponDataDto<T> {
         return messages;
     }
     
-    public T getdata() {
+    public Object getdata() {
         return data;
     }
-    
 }

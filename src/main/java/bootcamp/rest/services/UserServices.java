@@ -46,8 +46,12 @@ public class UserServices {
             throw new RuntimeException("User not found for this id :: " + Id); 
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles("ROLE" + "_" + user.getRoles());
+        userFind.setName(user.getName());
+        userFind.setEmail(user.getEmail());
+        userFind.setPhone_number(user.getPhone_number());
+        userFind.setPassword(passwordEncoder.encode(user.getPassword()));
+        userFind.setRoles("ROLE" + "_" + user.getRoles());
+        user = userFind;
             
         return userRepos.save(user);       
     }

@@ -1,7 +1,6 @@
 package bootcamp.rest.controllers;
 
 import java.util.Arrays;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -10,8 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,24 +37,21 @@ public class CategoryController {
     //This Category will send through by Request Body Client (Web or Mobile) 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<ResponDataDto<Category>> create(@Valid @RequestBody CategoryDto categoryDataTransferObject, Errors errors){
+    public ResponseEntity<ResponDataDto<Category>> create(@Valid @RequestBody CategoryDto categoryDataTransferObject){
 
         ResponDataDto<Category> responData = new ResponDataDto<>();
 
-        if(errors.hasErrors()){
-            for(ObjectError error : errors.getAllErrors()){
-                responData.getMessages().add(error.getDefaultMessage());
-            }
+        try {            
+            Category category = modelMapper.map(categoryDataTransferObject, Category.class);
+            responData.setStatus(true);
+            responData.setdata(categoryService.create(category));
+            return ResponseEntity.ok(responData);  
+        }catch (Exception e) {
+            responData.getMessages().add(e.getMessage());
             responData.setStatus(false);
             responData.setdata(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responData);
-        }
-
-        Category category = modelMapper.map(categoryDataTransferObject, Category.class);
-
-        responData.setStatus(true);
-        responData.setdata(categoryService.create(category));
-        return ResponseEntity.ok(responData);
+        }     
     }
 
     @GetMapping
@@ -74,24 +68,21 @@ public class CategoryController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<ResponDataDto<Category>> update(@Valid @RequestBody CategoryDto categoryDataTransferObject, Errors errors){
+    public ResponseEntity<ResponDataDto<Category>> update(@RequestBody CategoryDto categoryDataTransferObject){
 
         ResponDataDto<Category> responData = new ResponDataDto<>();
 
-        if(errors.hasErrors()){
-            for(ObjectError error : errors.getAllErrors()){
-                responData.getMessages().add(error.getDefaultMessage());
-            }
+        try {  
+            Category category = modelMapper.map(categoryDataTransferObject, Category.class); 
+            responData.setStatus(true);
+            responData.setdata(categoryService.create(category));
+            return ResponseEntity.ok(responData);
+        }catch(Exception e){
+            responData.getMessages().add(e.getMessage());
             responData.setStatus(false);
             responData.setdata(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responData);
         }
-
-        Category category = modelMapper.map(categoryDataTransferObject, Category.class); //Set Category Data using Map
-
-        responData.setStatus(true);
-        responData.setdata(categoryService.create(category));
-        return ResponseEntity.ok(responData);
     }
 
     @DeleteMapping("/{id}")
@@ -104,21 +95,29 @@ public class CategoryController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Iterable<Category> findByName(@RequestBody SearchDataDto searchData, @PathVariable("size") int size, @PathVariable("page") int page){
 
-        Pageable pageable = PageRequest.of(page, size);
-        return categoryService.findByName(searchData.getNameKey(), pageable);
+        try {  
+            Pageable pageable = PageRequest.of(page, size);
+            return categoryService.findByName(searchData.getNameKey(), pageable);
+        }catch(Exception e){
+            return null;
+        }        
     } 
 
     @PostMapping("/search/{size}/{page}/{sort}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public Iterable<Category> findByName(@RequestBody SearchDataDto searchData, @PathVariable("size") int size, @PathVariable("page") int page, @PathVariable("sort") String sort){
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));  // Default Asc
+        try{
+            Pageable pageable = PageRequest.of(page, size, Sort.by("id"));  // Default Asc
 
-        if(sort.equalsIgnoreCase("desc")){
-            pageable = PageRequest.of(page, size, Sort.by("id").descending()); // If Input Default Desc
-        }
+            if(sort.equalsIgnoreCase("desc")){
+                pageable = PageRequest.of(page, size, Sort.by("id").descending()); // If Input Default Desc
+            }
 
-        return categoryService.findByName(searchData.getNameKey(), pageable);
+            return categoryService.findByName(searchData.getNameKey(), pageable);
+        }catch(Exception e){
+            return null;
+        }       
     } 
 
     //This Method to Create More Category Data
@@ -127,8 +126,16 @@ public class CategoryController {
     public ResponseEntity<ResponDataDto<Iterable<Category>>> createMoreData(@RequestBody Category[] category){
 
         ResponDataDto<Iterable<Category>> responData = new ResponDataDto<>();
-        responData.setStatus(true);
-        responData.setdata(categoryService.createMoreData(Arrays.asList(category)));
-        return ResponseEntity.ok(responData);
+
+        try{             
+            responData.setStatus(true);
+            responData.setdata(categoryService.createMoreData(Arrays.asList(category)));
+            return ResponseEntity.ok(responData);
+        }catch(Exception e){
+            responData.getMessages().add(e.getMessage());
+            responData.setStatus(false);
+            responData.setdata(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responData);
+        }
     }
 }

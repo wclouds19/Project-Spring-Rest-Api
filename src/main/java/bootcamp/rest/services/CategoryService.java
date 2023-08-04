@@ -16,16 +16,16 @@ public class CategoryService {
     private CategoryRepo categoryRepo;
 
     public Category create(Category category){
-        
+
         //If Update Process
-        if(category.getId() != null){
-            Category currentCategory = categoryRepo.findById(category.getId()).get();
-            currentCategory.setName(category.getName());
-            currentCategory.setDescription(category.getDescription());
-            category = currentCategory;
+        if(category.getId() == null){
+            return categoryRepo.save(category);
         }
 
-        return categoryRepo.save(category);
+        Category currentCategory = categoryRepo.findById(category.getId()).get();
+        currentCategory.setName(category.getName());
+        currentCategory.setDescription(category.getDescription());
+        return categoryRepo.save(currentCategory);           
     }
 
     public Category findOneCategory(Long Id){

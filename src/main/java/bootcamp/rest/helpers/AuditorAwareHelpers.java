@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import bootcamp.rest.models.entities.UserEntity;
+import bootcamp.rest.models.entities.UserDetailEntity;
 
 public class AuditorAwareHelpers implements AuditorAware<String>{
 
@@ -13,8 +13,8 @@ public class AuditorAwareHelpers implements AuditorAware<String>{
     public Optional<String> getCurrentAuditor() {
 
         //Get to know current user login
-        UserEntity currentUser = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return Optional.of(currentUser.getEmail());
+        UserDetailEntity currentUser = (UserDetailEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return Optional.of(currentUser.getUsername());
     }
     
 }

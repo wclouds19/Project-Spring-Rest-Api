@@ -1,10 +1,14 @@
 package bootcamp.rest.services;
 
+import bootcamp.rest.helpers.CsvHelpers;
 import bootcamp.rest.models.entities.Article;
 import bootcamp.rest.models.repos.ArticleRepo;
+import io.jsonwebtoken.io.IOException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +57,14 @@ public class ArticleService {
     //Call the Custom  Method to Find Article by Author ID
     public List<Article> findByAuthor(Long Id){
         return articleRepo.findByAuthor(Id);
+    }
+
+    public List<Article> uploadCsv(MultipartFile file) throws java.io.IOException{
+        try{
+            List<Article> articleList = CsvHelpers.csvToArticle(file.getInputStream());
+            return (List<Article>) articleRepo.saveAll(articleList);
+        }catch(IOException ex){
+            throw new RuntimeException("Fail to parse CSV file: " + ex.getMessage());
+        }
     }
 }
