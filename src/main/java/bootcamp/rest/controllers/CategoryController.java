@@ -32,9 +32,8 @@ public class CategoryController {
     public CategoryService categoryService;
 
     @Autowired
-    public ModelMapper modelMapper;
-    
-    //This Category will send through by Request Body Client (Web or Mobile) 
+    public ModelMapper modelMapper;   
+
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ResponDataDto<Category>> create(@Valid @RequestBody CategoryDto categoryDataTransferObject){

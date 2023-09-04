@@ -31,9 +31,8 @@ import java.util.List;
 public class ArticleController {
 
     @Autowired
-    public ArticleService articleService;
-    
-    //This article will send through by Request Body Client (Web or Mobile) 
+    public ArticleService articleService;  
+  
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<ResponDataDto<Article>> create(@Valid @RequestBody Article article, Errors errors){
@@ -124,7 +123,7 @@ public class ArticleController {
 
         try{
             List<Article> articles = articleService.uploadCsv(file);
-            responData.setStatus(true);
+            responData.setStatus(true);  
             responData.getMessages().add("Upload the file successfully : "+ file.getOriginalFilename());
             responData.setdata(articles);
             return ResponseEntity.ok(responData);

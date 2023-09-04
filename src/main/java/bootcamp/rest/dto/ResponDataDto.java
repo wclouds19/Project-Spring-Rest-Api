@@ -3,7 +3,6 @@ package bootcamp.rest.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ResponDataDto<T> {
     
     private boolean status;
